@@ -1,0 +1,11 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>relay</title></head><body><p id="s">aguardando</p>
+<script>
+async function enviar(){
+  const s=document.getElementById('s');
+  const posts=await (await fetch('posts.json',{cache:'no-store'})).json();
+  for(const p of posts){ p.blob=await (await fetch(p.file)).blob(); s.textContent='baixado '+p.file; }
+  window.opener.postMessage({posts},'https://agenda.rwsys.com.br');
+  s.textContent='enviado '+posts.length;
+}
+window.addEventListener('load',()=>{ if(window.opener) enviar().catch(e=>document.getElementById('s').textContent='erro '+e); });
+</script></body></html>
